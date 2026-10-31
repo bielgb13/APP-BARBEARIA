@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbearia — Serviços</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            color: #222;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #222;
+            color: white;
+            padding: 32px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        main {
+            max-width: 850px;
+            margin: 32px auto;
+            padding: 0 20px;
+        }
+
+        .servicos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .servico,
+        .horarios {
+            background: white;
+            padding: 24px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .servico h3 {
+            margin-top: 0;
+        }
+
+        .preco {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .horarios {
+            margin-top: 24px;
+        }
+
+        .horarios h2 {
+            margin-top: 0;
+        }
+
+        footer {
+            padding: 24px;
+            text-align: center;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Barbearia</h1>
+        <p>Confira os serviços e os horários de atendimento.</p>
+    </header>
+
+    <main>
+        <section aria-labelledby="titulo-servicos">
+            <h2 id="titulo-servicos">Serviços</h2>
+
+            <div class="servicos">
+                <article class="servico">
+                    <h3>Corte</h3>
+                    <p class="preco">R$ 40,00</p>
+                    <p>Duração: 30 minutos</p>
+                </article>
+
+                <article class="servico">
+                    <h3>Barba</h3>
+                    <p class="preco">R$ 30,00</p>
+                    <p>Duração: 30 minutos</p>
+                </article>
+
+                <article class="servico">
+                    <h3>Corte e barba</h3>
+                    <p class="preco">R$ 60,00</p>
+                    <p>Duração: 60 minutos</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="horarios" aria-labelledby="titulo-horarios">
+            <h2 id="titulo-horarios">Horário de atendimento</h2>
+            <p>Terça a sábado, das 9h às 12h e das 13h às 18h.</p>
+            <p>Fechado aos domingos e às segundas-feiras.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Barbearia — Serviços e atendimento</p>
+    </footer>
+</body>
+</html>
