@@ -78,24 +78,16 @@
         <section aria-labelledby="titulo-servicos">
             <h2 id="titulo-servicos">Serviços</h2>
 
-            <div class="servicos">
-                <article class="servico">
-                    <h3>Corte</h3>
-                    <p class="preco">R$ 40,00</p>
-                    <p>Duração: 30 minutos</p>
-                </article>
-
-                <article class="servico">
-                    <h3>Barba</h3>
-                    <p class="preco">R$ 30,00</p>
-                    <p>Duração: 30 minutos</p>
-                </article>
-
-                <article class="servico">
-                    <h3>Corte e barba</h3>
-                    <p class="preco">R$ 60,00</p>
-                    <p>Duração: 60 minutos</p>
-                </article>
+                       <div class="servicos">
+                {% for servico in servicos %}
+                    <article class="servico">
+                        <h3>{{ servico.nome }}</h3>
+                        <p class="preco">R$ {{ servico.preco|floatformat:2 }}</p>
+                        <p>Duração: {{ servico.duracao_minutos }} minutos</p>
+                    </article>
+                {% empty %}
+                    <p>Nenhum serviço disponível no momento.</p>
+                {% endfor %}
             </div>
         </section>
 
