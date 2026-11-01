@@ -1,5 +1,5 @@
 from django.contrib import admin
-
+from .forms import AgendamentoAdminForm
 from .models import Agendamento, Servico
 
 
@@ -10,6 +10,7 @@ class ServicoAdmin(admin.ModelAdmin):
 
 @admin.register(Agendamento)
 class AgendamentoAdmin(admin.ModelAdmin):
+    form = AgendamentoAdminForm
     list_display = (
         'nome_cliente',
         'servico',

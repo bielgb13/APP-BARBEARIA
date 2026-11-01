@@ -1,4 +1,7 @@
+from django.core.exceptions import ValidationError
 from django.db import models
+
+from .regras import validar_horario
 
 
 class Servico(models.Model):
@@ -25,7 +28,7 @@ class Agendamento(models.Model):
         related_name='agendamentos',
     )
     inicio = models.DateTimeField()
-    fim = models.DateTimeField()
+    fim = models.DateTimeField(editable=False)
     situacao = models.CharField(
         max_length=10,
         choices=Situacao.choices,
@@ -38,3 +41,65 @@ class Agendamento(models.Model):
 
     def __str__(self):
         return f'{self.nome_cliente} - {self.servico.nome}'
+
+    def clean(self):
+        super().clean()
+
+        if not self.inicio or not self.servico_id:
+            return
+
+        servico = Servico.objects.filter(pk=self.servico_id).first()
+
+        if servico is None:
+            raise ValidationError({'servico': 'Selecione um serviço válido.'})
+
+        anterior = None
+
+        if self.pk:
+            anterior = Agendamento.objects.filter(pk=self.pk).first()
+
+        horario_alterado = (
+            anterior is None
+            or anterior.inicio != self.inicio
+            or anterior.servico_id != self.servico_id
+        )
+
+        reativando = (
+            anterior is not None
+            and anterior.situacao == self.Situacao.CANCELADO
+            and self.situacao != self.Situacao.CANCELADO
+        )
+
+        if horario_alterado or reativando:
+            if not servico.ativo:
+                raise ValidationError({
+                    'servico': 'Este serviço não está disponível.'
+                })
+
+            try:
+                self.fim = validar_horario(
+                    self.inicio,
+                    servico.duracao_minutos,
+                )
+            except ValidationError as erro:
+                raise ValidationError({'inicio': erro.messages})
+        else:
+            self.fim = anterior.fim
+
+        if self.situacao == self.Situacao.CANCELADO:
+            return
+
+        conflitos = Agendamento.objects.filter(
+            inicio__lt=self.fim,
+            fim__gt=self.inicio,
+        ).exclude(
+            situacao=self.Situacao.CANCELADO,
+        )
+
+        if self.pk:
+            conflitos = conflitos.exclude(pk=self.pk)
+
+        if conflitos.exists():
+            raise ValidationError({
+                'inicio': 'Já existe um atendimento nesse período.'
+            })
