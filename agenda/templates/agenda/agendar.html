@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbearia — Agendamento</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            color: #222;
+            line-height: 1.6;
+        }
+
+        main {
+            max-width: 600px;
+            margin: 32px auto;
+            padding: 24px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .campo {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            box-sizing: border-box;
+            max-width: 100%;
+            padding: 10px;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            font: inherit;
+        }
+
+        input[type="text"],
+        input[type="tel"] {
+            width: 100%;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: 0;
+            border-radius: 4px;
+            background: #222;
+            color: white;
+            font: inherit;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #444;
+        }
+
+        button:focus-visible,
+        a:focus-visible {
+            outline: 3px solid #1769aa;
+            outline-offset: 3px;
+        }
+
+        .errorlist {
+            color: #a40000;
+            padding-left: 20px;
+        }
+
+        .ajuda {
+            color: #555;
+            font-size: 14px;
+        }
+
+        .confirmacao,
+        .aviso {
+            margin-bottom: 24px;
+            padding: 16px;
+            border-radius: 4px;
+        }
+
+        .confirmacao {
+            background: #e7f5e8;
+            border: 1px solid #8ab88e;
+        }
+
+        .aviso {
+            background: #fff5d6;
+            border: 1px solid #c7a64c;
+        }
+
+        .reserva {
+            margin-top: 32px;
+            padding-top: 16px;
+            border-top: 1px solid #ddd;
+        }
+
+        a {
+            color: #222;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <a href="{% url 'agenda:inicio' %}">Voltar ao início</a>
+
+        <h1>Agendar atendimento</h1>
+
+        {% if confirmacao %}
+            <section class="confirmacao" role="status">
+                <h2>Agendamento confirmado!</h2>
+                <p><strong>Serviço:</strong> {{ confirmacao.servico }}</p>
+                <p><strong>Data:</strong> {{ confirmacao.data }}</p>
+                <p><strong>Horário:</strong> {{ confirmacao.horario }}</p>
+            </section>
+        {% endif %}
+
+        <p>
+            Atendemos de terça a sábado,
+            das 9h às 12h e das 13h às 18h.
+        </p>
+
+        <h2>1. Consulte os horários</h2>
+
+        <form method="get" action="{% url 'agenda:agendar' %}">
+            {{ consulta.non_field_errors }}
+
+            {% for campo in consulta %}
+                <div class="campo">
+                    {{ campo.label_tag }}
+                    {{ campo }}
+                    {{ campo.errors }}
+                </div>
+            {% endfor %}
+
+            <button type="submit">Consultar horários</button>
+        </form>
+
+        {% if formulario is not None %}
+            <section class="reserva">
+                <h2>2. Confirme seu agendamento</h2>
+
+                {% if servico_consultado %}
+                    <p>
+                        <strong>Serviço:</strong>
+                        {{ servico_consultado.nome }}
+                    </p>
+                    <p>
+                        <strong>Duração:</strong>
+                        {{ servico_consultado.duracao_minutos }} minutos
+                    </p>
+                    <p>
+                        <strong>Data:</strong>
+                        {{ data_consultada|date:"d/m/Y" }}
+                    </p>
+                {% endif %}
+
+                {{ formulario.non_field_errors }}
+                {{ formulario.servico.errors }}
+
+                {% if formulario.horarios_disponiveis %}
+                    <form method="post" action="{% url 'agenda:agendar' %}">
+                        {% csrf_token %}
+
+                        {{ formulario.servico.as_hidden }}
+
+                        <div class="campo">
+                            {{ formulario.nome_cliente.label_tag }}
+                            {{ formulario.nome_cliente }}
+                            {{ formulario.nome_cliente.errors }}
+                        </div>
+
+                        <div class="campo">
+                            {{ formulario.telefone.label_tag }}
+                            {{ formulario.telefone }}
+                            {{ formulario.telefone.errors }}
+                        </div>
+
+                        <div class="campo">
+                            {{ formulario.inicio.label_tag }}
+                            {{ formulario.inicio }}
+                            {{ formulario.inicio.errors }}
+
+                            <p class="ajuda">
+                                Para trocar o serviço ou a data,
+                                faça uma nova consulta acima.
+                                A disponibilidade será conferida
+                                novamente ao confirmar.
+                            </p>
+                        </div>
+
+                        <button type="submit">
+                            Confirmar agendamento
+                        </button>
+                    </form>
+                {% else %}
+                    {{ formulario.inicio.errors }}
+
+                    <p class="aviso" role="status">
+                        Não há horários disponíveis para essa seleção.
+                        Consulte outro dia ou serviço.
+                    </p>
+                {% endif %}
+            </section>
+        {% endif %}
+    </main>
+</body>
+</html>
