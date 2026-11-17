@@ -6,4 +6,5 @@ app_name = 'agenda'
 
 urlpatterns = [
     path('', views.inicio, name='inicio'),
+    path('agendar/', views.agendar, name='agendar'),
 ]
