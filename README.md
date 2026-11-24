@@ -1,42 +1,53 @@
 # APP-BARBEARIA
 
-Projeto acadêmico em desenvolvimento para ajudar o barbeiro a organizar seus atendimentos e facilitar o agendamento dos clientes.
+Projeto acadêmico de um sistema de agendamento para uma barbearia com um único barbeiro. O cliente escolhe o serviço, consulta os horários livres e faz a reserva informando nome e telefone. O barbeiro acompanha os atendimentos pela área administrativa.
 
-## Problema
+## Como funciona
 
-O controle de horários por mensagens ou anotações pode gerar esquecimentos e marcações no mesmo horário. A proposta é reunir os agendamentos em um sistema simples, voltado a uma pequena barbearia.
+A barbearia atende de terça a sábado, das 9h às 12h e das 13h às 18h. Os horários de início são oferecidos a cada 30 minutos. O sistema considera a duração do serviço para verificar se o atendimento cabe no expediente e se há outra reserva no mesmo período.
 
-## Objetivo
+Por exemplo, se um cliente marcar corte e barba às 17h, o atendimento vai até as 18h. Nesse caso, o horário das 17h30 também fica ocupado. Se o barbeiro cancelar a reserva, os horários voltam a aparecer na consulta.
 
-Desenvolver um aplicativo que permita consultar serviços, agendar atendimentos e gerenciar a agenda do barbeiro.
+O cliente recebe a confirmação na própria página, com serviço, data e horário. Na área administrativa, o barbeiro pode consultar a agenda por dia, pesquisar pelo telefone e marcar um atendimento como concluído ou cancelado. A primeira versão funciona localmente e não inclui pagamentos, mensagens automáticas ou gestão de várias unidades.
 
-## Público-alvo
+## Como executar no Windows
 
-Barbeiros que trabalham por conta própria e seus clientes.
+O projeto usa Python 3.13, Django e SQLite. Com o Git e o Python 3.13 instalados, abra o PowerShell e execute os comandos abaixo para preparar uma cópia do projeto.
 
-## Funcionalidades previstas
+```powershell
+git clone https://github.com/bielgb13/APP-BARBEARIA.git
+cd APP-BARBEARIA
+py -3.13 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe manage.py migrate
+.\.venv\Scripts\python.exe manage.py createsuperuser
+```
 
-- Consultar serviços, preços e duração dos atendimentos.
-- Agendar um serviço informando nome, contato, data e horário.
-- Impedir agendamentos em horários ocupados.
-- Permitir que o barbeiro consulte sua agenda em uma área com senha.
-- Cancelar agendamentos e marcar atendimentos como concluídos.
+No último comando, escolha o usuário e a senha que serão usados para acessar a administração. Para iniciar o servidor, execute:
 
-## Limites da primeira versão
+```powershell
+.\.venv\Scripts\python.exe manage.py runserver
+```
 
-O sistema será desenvolvido para uma barbearia com um barbeiro. Não terá pagamento online, envio automático de mensagens ou gerenciamento de várias unidades.
+Deixe o terminal aberto enquanto usa o sistema. Na primeira execução, entre na [área administrativa](http://127.0.0.1:8000/admin/), abra **Serviços** e cadastre os serviços abaixo como ativos.
 
-## Etapas de desenvolvimento
+| Serviço | Preço | Duração |
+| --- | --- | --- |
+| Corte | R$ 40,00 | 30 minutos |
+| Barba | R$ 30,00 | 30 minutos |
+| Corte e barba | R$ 60,00 | 60 minutos |
 
-1. Planejamento e organização do repositório.
-2. Definição das tecnologias e modelagem do sistema.
-3. Desenvolvimento das funcionalidades.
-4. Testes e correções.
-5. Documentação e apresentação.
+Depois, abra a [página de agendamento](http://127.0.0.1:8000/agendar/) para consultar os horários e fazer uma reserva.
 
-## Situação atual
+## Testes
 
-Projeto em fase de planejamento. As funcionalidades ainda não foram implementadas.
+Na pasta que contém o arquivo `manage.py`, execute:
+
+```powershell
+.\.venv\Scripts\python.exe manage.py test agenda
+```
+
+Os testes verificam as regras de horário, a disponibilidade dos serviços e o fluxo de agendamento do cliente.
 
 ## Autor
 
