@@ -1,0 +1,66 @@
+<style>
+    :root {
+        --verde: #203c33;
+        --creme: #f7f3e9;
+        --dourado: #e5b875;
+    }
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background: var(--creme);
+        color: var(--verde);
+        font-family: "Segoe UI", Arial, sans-serif;
+        line-height: 1.55;
+    }
+    h1, h2, h3, .preco { font-family: Georgia, serif; }
+    header {
+        background: var(--verde);
+        border-bottom: 5px solid var(--dourado);
+        padding: 40px max(5vw, calc((100vw - 960px) / 2));
+        text-align: left;
+        color: white;
+    }
+    header h1 { margin: 0; font-size: clamp(3rem, 7vw, 6rem); }
+    header p { margin: 8px 0 16px; }
+    main { max-width: 960px; }
+    .servico, .horarios, main.agenda {
+        background: #fffdf7;
+        border: 1px solid #d6cfc0;
+        border-radius: 12px;
+    }
+    .servico { border-top: 3px solid #967245; }
+    .servico h3 { font-size: 1.5rem; }
+    .preco { color: var(--verde); font-size: 2rem; margin: 16px 0 4px; }
+    .botao-agendar, button {
+        display: inline-block;
+        border: 0;
+        border-radius: 6px;
+        padding: 12px 20px;
+        background: var(--verde);
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    .botao-agendar { background: var(--dourado); color: #182c25; }
+    .botao-agendar:hover { background: #f2cb90; }
+    button:hover { background: #305747; }
+    main.agenda {
+        width: min(94%, 660px);
+        margin: 24px auto;
+        padding: clamp(18px, 4vw, 36px);
+        border-top: 5px solid var(--verde);
+    }
+    .agenda input, .agenda select {
+        width: 100%;
+        min-height: 44px;
+        border: 1px solid #918e80;
+        border-radius: 6px;
+        background: white;
+        color: var(--verde);
+    }
+    .agenda input + select { margin-top: 8px; }
+    @media (max-width: 520px) {
+        .servicos { grid-template-columns: 1fr; }
+        .agenda button { width: 100%; }
+    }
+</style>

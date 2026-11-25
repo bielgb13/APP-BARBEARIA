@@ -86,20 +86,22 @@
             color: #555;
         }
     </style>
+{% include "agenda/estilo.html" %}
 </head>
 
 <body>
     <header>
         <h1>Barbearia</h1>
         <p>Confira os serviços e os horários de atendimento.</p>
-    </header>
-
-    <main>
-        <p>
+    <p>
             <a class="botao-agendar" href="{% url 'agenda:agendar' %}">
                 Agendar atendimento
             </a>
         </p>
+    </header>
+
+    <main>
+        
 
         <section aria-labelledby="titulo-servicos">
             <h2 id="titulo-servicos">Serviços</h2>
